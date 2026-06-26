@@ -1,0 +1,14 @@
+<script>
+  const ws = new WebSocket("wss://echo.54.254.236.248.sslip.io");
+
+  ws.onmessage = (event) => {
+    const message = event.data;
+    console.log("Received message:", message);
+  };
+</script>
+
+<link rel="stylesheet" href="styles.css" />
+
+<h1></h1>
+
+<div class="contents"></div>
