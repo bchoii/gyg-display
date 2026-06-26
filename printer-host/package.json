@@ -1,0 +1,20 @@
+{
+  "name": "printer-host",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --import tsx src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.7.2",
+    "tsx": "^4.21.0"
+  }
+}

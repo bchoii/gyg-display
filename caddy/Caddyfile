@@ -1,0 +1,69 @@
+{
+  debug
+  servers :443 {
+		name https
+	}
+}
+
+http:// {
+  respond "HTTP Ok {client_ip}"
+}
+
+(developer-ips) {
+  @developer-ips {
+    client_ip 132.147.120.42 # tampines
+    client_ip 202.83.107.62 # kidotech
+    client_ip 158.140.146.132 # kuartz
+    client_ip 222.164.27.241 # CCK
+    client_ip 116.89.51.20 # CCK
+  }
+}
+
+localhost {
+  respond "localhost"
+}
+
+:443 {
+  respond ":443"
+}
+
+ip.54.254.236.248.sslip.io {
+  respond "{client_ip}"
+}
+
+echo.54.254.236.248.sslip.io {
+  reverse_proxy echo:3000
+}
+
+drive.54.254.236.248.sslip.io {
+  root * /srv
+  file_server
+}
+
+printer.54.254.236.248.sslip.io {
+  reverse_proxy webapp:5173
+}
+
+dozzle.54.254.236.248.sslip.io {
+  import developer-ips
+  route {
+    reverse_proxy @developer-ips dozzle:8080
+    respond "Forbidden"
+  }
+}
+
+dbgate.54.254.236.248.sslip.io {
+  import developer-ips
+  route {
+    reverse_proxy @developer-ips dbgate:3000
+    respond "Forbidden"
+  }
+}
+
+whoami.54.254.236.248.sslip.io {
+  import developer-ips
+  route {
+    reverse_proxy @developer-ips whoami:80
+    respond "Forbidden"
+  }
+}

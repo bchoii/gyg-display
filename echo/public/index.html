@@ -1,0 +1,44 @@
+<script>
+  const protocol = document.location.protocol == "http:" ? "ws://" : "wss://";
+  const hostname = window.location.host;
+  const room = window.location.pathname;
+  const socket = new WebSocket(protocol + hostname + room);
+  const messages = [];
+
+  socket.addEventListener("open", (event) => console.log("Connection opened"));
+
+  socket.addEventListener("error", (event) =>
+    console.log("Connection event", error),
+  );
+
+  socket.addEventListener("close", (event) =>
+    console.log("Connection closeed"),
+  );
+
+  socket.addEventListener("message", (event) => {
+    messages.unshift(event.data);
+    output.textContent = messages.join("\n");
+  });
+
+  function closeSocket() {
+    socket.close();
+  }
+
+  async function post() {
+    const message = `Message ${Date.now().toString(36)} from ${room}`;
+    const response = await fetch(room, {
+      method: "post",
+      body: JSON.stringify({ message }),
+    }).then((res) => res.json());
+    console.log("response:", response);
+  }
+</script>
+<div><a href="/">Home</a></div>
+<div>Room : <output id="room"></output></div>
+<button onclick="post()">Post</button>
+<button onclick="closeSocket()">Close Socket</button>
+<pre id="output" style="white-space: pre-wrap"></pre>
+
+<script>
+  document.getElementById("room").value = room;
+</script>

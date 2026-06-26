@@ -1,0 +1,58 @@
+services:
+  printer-host:
+    container_name: printer-host
+    build:
+      context: ./../printer-host
+    logging:
+      driver: local
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+
+  webapp:
+    container_name: webapp
+    build:
+      context: ./../webapp
+    logging:
+      driver: local
+    restart: unless-stopped
+    # environment:
+    #   NODE_ENV: production
+
+  caddy:
+    container_name: caddy
+    image: caddy:2.8.4-alpine
+    logging:
+      driver: local
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/../caddy/:/etc/caddy/
+      - $PWD/../caddy/data:/data
+      - $PWD/../caddy/config:/config
+      - $PWD/../caddy/log:/var/log
+      - $PWD/../srv:/srv
+
+  whoami:
+    container_name: whoami
+    image: traefik/whoami:v1.10.4
+    restart: unless-stopped
+
+  echo:
+    container_name: echo
+    build:
+      context: ./../echo
+    logging:
+      driver: local
+    restart: unless-stopped
+
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:v8.10
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DOZZLE_NO_ANALYTICS: true
